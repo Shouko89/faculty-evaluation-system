@@ -61,7 +61,7 @@ class Curriculum_Model extends CI_Model {
     function remove(){
         extract($_POST);
         if(!empty($id)){
-            $rem = $this->db->update('curriculum_level_list',array('status'=>0),array('id'=>$id));
+            $rem = $this->db->delete('curriculum_level_list',array('id'=>$id));
             if($rem)
             return 1;
         }

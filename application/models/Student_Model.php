@@ -63,7 +63,7 @@ class Student_Model extends CI_Model {
     function remove(){
         extract($_POST);
         if(!empty($id)){
-            $rem = $this->db->update('student_list',array('status'=>0),array('id'=>$id));
+            $rem = $this->db->delete('student_list',array('id'=>$id));
             if($rem)
             return 1;
         }

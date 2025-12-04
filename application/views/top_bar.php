@@ -7,19 +7,28 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <a class="navbar-brand" href="./"><strong>Teachers Evaluation System</strong></a>
+        <?php
+        // Set navbar title based on user type
+        $navbarTitle = "Evaluation Page"; // Default title for other users
+        
+        if (isset($_SESSION['login_user_type'])) {
+            $userType = $_SESSION['login_user_type'];
+            
+            // User types that should see "Teachers Evaluation System"
+            $adminUserTypes = [1, 2, 3]; // 1 = admin, 2 = staff, 3 = dean
+            
+            if (in_array($userType, $adminUserTypes)) {
+                $navbarTitle = "Faculty Evaluation System";
+            }
+            // For other user types (faculty, students, etc.), keep "Evaluation Page" as default
+        }
+        ?>
+
+        <a class="navbar-brand" href=""><strong><?php echo $navbarTitle; ?></strong></a>
 
         <!-- Links -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <div class="navbar-nav mr-auto"></div>
-          <!-- Left -->
-         <!--  <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="" href="./"><strong>Teachers Evaluation System</strong>
-              </a>
-            </li>
-          </ul> -->
-
           <!-- Right -->
           <ul class="navbar-nav nav-flex-icons">
             <li class="nav-item">
@@ -37,9 +46,7 @@
             </div>
             </li>
           </ul>
-
-        
-
+        </div>
       </div>
     </nav>
     <!-- Navbar -->
@@ -51,3 +58,25 @@
         })
       })
     </script>
+
+    <style>
+  /* Maroon and Gold Theme */
+  .navbar {
+    background-color: #800000 !important; /* maroon */
+  }
+  .navbar .nav-link,
+  .navbar .navbar-brand {
+    color: #FFD700 !important; /* gold */
+  }
+  .navbar .nav-link:hover,
+  .navbar .dropdown-item:hover {
+    color: #fff !important; /* white on hover */
+    background-color: #a52a2a !important; /* lighter maroon hover */
+  }
+  .dropdown-menu {
+    background-color: #fff; /* keep dropdown white for contrast */
+  }
+  .dropdown-item {
+    color: #800000 !important;
+  }
+</style>

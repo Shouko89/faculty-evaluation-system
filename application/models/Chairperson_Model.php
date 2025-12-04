@@ -63,7 +63,7 @@ class Chairperson_Model extends CI_Model {
     function remove(){
         extract($_POST);
         if(!empty($id)){
-            $rem = $this->db->update('chairperson_list',array('status'=>0),array('id'=>$id));
+            $rem = $this->db->delete('chairperson_list',array('id'=>$id));
             if($rem)
             return 1;
         }
