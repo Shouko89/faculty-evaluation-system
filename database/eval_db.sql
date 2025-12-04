@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `answers`
 --
 
-CREATE TABLE `answers` (
+CREATE TABLE IF NOT EXISTS `answers` (
   `id` int(30) NOT NULL,
   `restriction_id` int(30) NOT NULL,
   `student_id` int(30) NOT NULL,
@@ -231,10 +231,11 @@ CREATE TABLE `department_list` (
   `id` int(30) NOT NULL,
   `department` text NOT NULL,
   `description` text NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0=Inactive , 1 = Active',
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `date_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `date_created` date NOT NULL DEFAULT current_timestamp()
+  `date_created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 --
 -- Dumping data for table `department_list`
@@ -321,7 +322,7 @@ CREATE TABLE `faculty_list` (
   `department_id` int(30) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0=Inactive , 1 = active',
   `date_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `date_created` date NOT NULL DEFAULT current_timestamp()
+  `date_created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
