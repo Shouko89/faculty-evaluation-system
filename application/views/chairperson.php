@@ -10,43 +10,349 @@
   <?php include 'header.php' ?>
   
   <style>
-    .sidebar-fixed{
-      z-index:1040
+    /* Base body */
+    body,
+    html {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8f2f0 0%, #f0e6e3 100%);
+      color: #3c3c3c;
+      line-height: 1.6;
     }
-    div#load_modal {
-    background: #00000059;
+
+    /* Toast */
+    #dynamic_toast .badge-type {
+      background-color: #800000 !important;
+      color: #FFD700 !important;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(128, 0, 0, 0.2);
     }
-    .map-container{
-    overflow:hidden;
-    padding-bottom:56.25%;
-    position:relative;
-    height:0;
+
+    #dynamic_toast .icon-place {
+      color: #FFD700 !important;
     }
-    .map-container iframe{
-    left:0;
-    top:0;
-    height:100%;
-    width:100%;
-    position:absolute;
+
+    /* Card */
+    .card {
+      border-radius: 1rem;
+      border: 1px solid #800000;
+      box-shadow: 0 8px 25px rgba(128, 0, 0, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
     }
+
+    .card:hover {
+      box-shadow: 0 12px 30px rgba(128, 0, 0, 0.2);
+    }
+
+    /* Card headers */
+    .card .card-body h4,
+    .card .card-body h5 {
+      color: #800000;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Input fields */
+    .md-form {
+      margin-bottom: 1.5rem;
+    }
+
+    .md-form input.form-control,
+    .md-form textarea.form-control {
+      border: 2px solid #800000;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      transition: all 0.3s ease;
+      background-color: #fff8f6;
+      color: #3c3c3c;
+      font-size: 1rem;
+    }
+
+    .md-form input.form-control:focus,
+    .md-form textarea.form-control:focus {
+      border-color: #FFD700;
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+      background-color: #fff !important;
+    }
+
+    /* Input labels */
+    .md-form label {
+      color: #800000;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .md-form input.form-control:focus + label,
+    .md-form textarea.form-control:focus + label {
+      color: #a83232;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background-color: #800000 !important;
+      color: #FFD700 !important;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      box-shadow: 0 4px 10px rgba(128, 0, 0, 0.2);
+    }
+
+    .btn-primary:hover {
+      background-color: #a83232 !important;
+      color: #FFD700 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(128, 0, 0, 0.3);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Faculty selector buttons */
+    #faculties {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    #faculties button {
+      flex: 1 0 auto;
+      min-width: 200px;
+      transition: all 0.3s ease;
+      border-radius: 1rem;
+      padding: 0.75rem 1.25rem;
+      font-weight: 500;
+      border: 2px solid #800000;
+      background-color: white !important;
+      color: #800000 !important;
+    }
+
+    #faculties button:hover {
+      background-color: #f8f2f0;
+      transform: translateY(-2px);
+    }
+
+    #faculties button.active {
+      background-color: #800000 !important;
+      color: #FFD700 !important;
+      border: 2px solid #FFD700 !important;
+      box-shadow: 0 4px 10px rgba(128, 0, 0, 0.3);
+    }
+
+    /* Rating scale items */
+    .rating-field input[type="radio"] {
+      display: none;
+    }
+
+    .rating-field input[type="radio"] + label {
+      display: inline-block;
+      border: 2px solid #800000;
+      border-radius: 0.75rem;
+      padding: 0.5rem 1rem;
+      margin: 0 0.25rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .rating-field input[type="radio"]:hover + label {
+      background-color: rgba(128, 0, 0, 0.1);
+    }
+
+    .rating-field input[type="radio"]:checked + label {
+      background-color: #800000;
+      color: #FFD700;
+      border-color: #FFD700;
+      box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
+    }
+
+    /* Question items */
+    .question-item {
+      border-top: 1px solid rgba(128, 0, 0, 0.2);
+      padding: 1.5rem 0;
+      transition: background-color 0.3s ease;
+    }
+
+    .question-item:hover {
+      background-color: rgba(255, 248, 246, 0.5);
+    }
+
+    .question-text {
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    /* Textarea field */
+    .textarea-field textarea.md-textarea {
+      border: 2px solid #800000;
+      border-radius: 0.75rem;
+      background-color: #fff8f6;
+      padding: 1rem;
+      color: #3c3c3c;
+      transition: all 0.3s ease;
+    }
+
+    .textarea-field textarea.md-textarea:focus {
+      border-color: #FFD700;
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+      background-color: #fff;
+    }
+
+    /* Criteria items */
+    .criteria-item {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background-color: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 12px rgba(128, 0, 0, 0.1);
+    }
+
+    .criteria-item b {
+      font-size: 1.2rem;
+      color: #800000;
+      display: block;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(128, 0, 0, 0.1);
+    }
+
+    /* Footer */
+    .page-footer {
+      background-color: #800000 !important;
+      color: #FFD700 !important;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      background-color: #FFD700 !important;
+      border-radius: 10px;
+    }
+
+    /* Main content spacing */
+    main {
+      padding-top: 2rem !important;
+    }
+
+    /* Form elements */
+    #evaluation-field {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    #evaluation-field ul {
+      padding-left: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    /* Rating scale legend */
+    .rating-legend {
+      background: linear-gradient(to right, #fff8f6, #f0e6e3);
+      border-radius: 0.75rem;
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(128, 0, 0, 0.2);
+    }
+
+    .rating-legend b {
+      color: #800000;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      #faculties button {
+        min-width: 100%;
+      }
+      
+      .card-body {
+        padding: 1.5rem;
+      }
+      
+      .criteria-item {
+        padding: 1rem;
+      }
+    }
+
+    /* Loading animation */
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+    
+    .loading-pulse {
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    /* Modal styles */
+    .modal-content {
+      border: 2px solid #800000;
+      border-radius: 10px;
+    }
+
+    .modal-header {
+      background: #800000;
+      color: #FFD700;
+      border-bottom: 2px solid #FFD700;
+    }
+
+    .modal-title {
+      font-weight: bold;
+    }
+
+    .modal-footer {
+      border-top: 1px solid #800000;
+    }
+
+    /* Loading modal */
+    #load_modal {
+      background: rgba(128, 0, 0, 0.4) !important;
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    #load_modal .card {
+      border: 2px solid #FFD700;
+      border-radius: 10px;
+    }
+
+    #load_modal .spinner-border {
+      color: #800000;
+      width: 3rem;
+      height: 3rem;
+    }
+
+    #load_modal small b {
+      color: #800000;
+    }
+
+    /* Toast positioning */
     #dynamic_toast{
       position: absolute;
-    width: 20.2rem;
-    right: 10px;
+      width: 20.2rem;
+      right: 10px;
     }
     #dynamic_toast.show{
       z-index:9999
     }
-    .col-md-12.question-text:before {
-    content: "";
-    font-weight: bolder;
-}
-.question-item.mb-2 {
-    border-top: 1px solid #00000036;
-}
-#faculties .btn-rounded{
-  border-radius:10em !important
-}
+
+    .sidebar-fixed{
+      z-index:1040
+    }
   </style>
 </head>
 
@@ -62,200 +368,213 @@
 <!-- toast -->
   <!--Main Navigation-->
   <header>
-
      <?php include 'top_bar.php' ?>
-
-    
-
   </header>
   <!--Main Navigation-->
-
 
   <!--Main layout-->
   <main class="pt-5" style="padding-left:unset">
     <div class="container-fluid mt-5">
-    <div id="faculties">
-      <?php 
-      $evaluated = $this->db->query("SELECT distinct(faculty_id) from answers where evaluation_id= '".$_SESSION['sy_id']."' and chairperson_id = {$_SESSION['login_id']} ");
-      $evaluated_arr= array_column($evaluated->result_array(),"faculty_id","faculty_id");
-      $fid =isset($_GET['fid']) && !in_array($_GET['fid'],$evaluated_arr) ? $_GET['fid'] : '';
-      $fname_arr = array();
-        $qry = $this->db->query("SELECT * FROM faculty_list where id in (SELECT r.faculty_id from restriction_list r inner join curriculum_level_list cl where r.evaluation_id= '".$_SESSION['sy_id']."' and cl.department_id = '".$_SESSION['login_department_id']."' and cl.course_id = '".$_SESSION['login_course_id']."' ) ".(count($evaluated_arr) > 0 ? " and id not in (".(implode(',',$evaluated_arr)).")" : '' ));
-       
-        foreach($qry->result_array() as $row):
-          $fname_arr[$row['id']] = ucwords($row['firstname']. ' '. $row['lastname'].' '.$row['name_pref']);
-      ?>
-        <button type="button" class="btn btn-primary btn-rounded <?php echo (isset($_GET['fid']) && $_GET['fid'] == $row['id']) ? "active" : (empty($fid) ? "active" : ""); ?>" data-id='<?php echo $row['id'] ?>'>
-<?php echo ucwords($row['firstname']. ' '. $row['lastname'].' '.$row['name_pref']) ?></button>
-        <?php 
-        if(empty($fid) && $qry->num_rows() > 0 ){
-          $fid = $row['id'];
-        }
-        endforeach; 
-        if(!empty($fid)):
-        $criteria_arr = array();
-        $criteria = $this->db->query("SELECT * FROM criteria where status = 1 and id in (SELECT criteria_id from question_list where evaluation_id = {$_SESSION['sy_id']} and question_for = 2 ) order by order_by asc");
-        foreach($criteria->result_array() as $row):
-            $criteria_arr[]=$row;
-        endforeach; 
-      endif;
-        ?>
-    </div>
-    <?php if(!empty($fid)): ?>
-    <form id="answer-frm"> 
+      <!-- Faculty Selection -->
       <div class="card mb-4">
         <div class="card-body">
-              <div class="col-lg-12">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="row">
-                      <div class="md-form col-sm-12">
-                      <input type="hidden" name="eid" value="<?php echo $_SESSION['sy_id'] ?>">
-                      <input type="hidden" name="faculty_id" value="<?php echo $fid ?>">
-                        <input type="text" class="form-control" name="other_details['name']" id="name" value="<?php echo $_SESSION['login_lastname'].', '.$_SESSION['login_firstname'].' '.$_SESSION['login_middlename'] ?>" readonly>
-                        <label for="name" class="control-label">Name</label>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                  <div class="row">
-                      <div class="md-form col-sm-12">
-                        <input type="text" class="form-control" name="other_details['faculty']" value="<?php echo $fname_arr[$fid] ?>" id="faculty" readonly>
-                        <label for="faculty" class="control-label">Faculty</label>
-                      </div>
-                    </div>
-                  </div>
+          <h4 class="mb-4">Select Faculty to Evaluate</h4>
+          <div id="faculties">
+            <?php 
+            $evaluated = $this->db->query("SELECT distinct(faculty_id) from answers where evaluation_id= '".$_SESSION['sy_id']."' and chairperson_id = {$_SESSION['login_id']} ");
+            $evaluated_arr= array_column($evaluated->result_array(),"faculty_id","faculty_id");
+            $fid =isset($_GET['fid']) && !in_array($_GET['fid'],$evaluated_arr) ? $_GET['fid'] : '';
+            $fname_arr = array();
+              $qry = $this->db->query("SELECT * FROM faculty_list where id in (SELECT r.faculty_id from restriction_list r inner join curriculum_level_list cl where r.evaluation_id= '".$_SESSION['sy_id']."' and cl.department_id = '".$_SESSION['login_department_id']."' and cl.course_id = '".$_SESSION['login_course_id']."' ) ".(count($evaluated_arr) > 0 ? " and id not in (".(implode(',',$evaluated_arr)).")" : '' ));
+             
+              foreach($qry->result_array() as $row):
+                $fname_arr[$row['id']] = ucwords($row['firstname']. ' '. $row['lastname'].' '.$row['name_pref']);
+            ?>
+              <button type="button" class="btn btn-primary <?php echo (isset($_GET['fid']) && $_GET['fid'] == $row['id']) ? "active" : (empty($fid) ? "active" : ""); ?>" data-id='<?php echo $row['id'] ?>'>
+  <?php echo ucwords($row['firstname']. ' '. $row['lastname'].' '.$row['name_pref']) ?></button>
+              <?php 
+              if(empty($fid) && $qry->num_rows() > 0 ){
+                $fid = $row['id'];
+              }
+              endforeach; 
+              if(!empty($fid)):
+              $criteria_arr = array();
+              $criteria = $this->db->query("SELECT * FROM criteria where status = 1 and id in (SELECT criteria_id from question_list where evaluation_id = {$_SESSION['sy_id']} and question_for = 2 ) order by order_by asc");
+              foreach($criteria->result_array() as $row):
+                  $criteria_arr[]=$row;
+              endforeach; 
+            endif;
+              ?>
+          </div>
+        </div>
+      </div>
+
+      <?php if(!empty($fid)): ?>
+      <form id="answer-frm"> 
+        <!-- Chairperson and Faculty Information -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="mb-4">Evaluation Information</h4>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="md-form">
+                  <input type="hidden" name="eid" value="<?php echo $_SESSION['sy_id'] ?>">
+                  <input type="hidden" name="faculty_id" value="<?php echo $fid ?>">
+                  <input type="text" class="form-control" name="other_details['name']" id="name" value="<?php echo $_SESSION['login_lastname'].', '.$_SESSION['login_firstname'].' '.$_SESSION['login_middlename'] ?>" readonly>
+                  <label for="name" class="control-label">Chairperson Name</label>
                 </div>
               </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-body">
-        <div class="text-center"><h4><b><?php echo "SY : ".$_SESSION['sy_school_year']." ".$_SESSION['sy_semester']. " SEMESTER" ?></b></h4></div>
-        <hr>
-        <div>
-        <b>Rating Scale: 5 = Outstanding, 4 = Very Satisfactory, 3 = Satisfactory, 2 = Fair, 1 = Poor</b>
-        <hr>
-        </div>
-            <ul class="" id="evaluation-field">
-                
-
-
-            </ul>
-            <hr>
-            <div class="form-group">
-            <label for="" class="control-label">Comment</label>
-            <textarea name="comment" id="comment" cols="30" rows="5" class="form-control"></textarea>
+              <div class="col-md-6">
+                <div class="md-form">
+                  <input type="text" class="form-control" name="other_details['faculty']" value="<?php echo $fname_arr[$fid] ?>" id="faculty" readonly>
+                  <label for="faculty" class="control-label">Faculty Member</label>
+                </div>
+              </div>
             </div>
-            <button  class="btn btn-primary btn-block">Submit</button>
+          </div>
         </div>
-      </div>
 
-    </form>
-    <?php elseif($qry->num_rows() == 0 && $evaluated->num_rows() == 0): ?>
-      <div class="container-fluid">
-      <div class="col-lg-12">
+        <!-- Evaluation Form -->
         <div class="card">
           <div class="card-body">
-            <center><h4><b>There is no assigned faculty assigned under your course/program for <?php echo $_SESSION['sy_school_year'].' '.$_SESSION['sy_semester'] ?> SEMESTER Evaluation yet. Thank you</b></h4></center>
+            <div class="text-center mb-4">
+              <h4><b><?php echo "SY : ".$_SESSION['sy_school_year']." ".$_SESSION['sy_semester']. " SEMESTER" ?></b></h4>
+            </div>
+            <hr>
             
+            <!-- Rating Legend -->
+            <div class="rating-legend">
+              <b>Rating Scale:</b>
+              <div class="d-flex flex-wrap">
+                <div class="mr-4 mb-1">5 = Outstanding</div>
+                <div class="mr-4 mb-1">4 = Very Satisfactory</div>
+                <div class="mr-4 mb-1">3 = Satisfactory</div>
+                <div class="mr-4 mb-1">2 = Fair</div>
+                <div class="mb-1">1 = Poor</div>
+              </div>
+            </div>
+            
+            <!-- Evaluation Questions -->
+            <ul class="" id="evaluation-field"></ul>
+            
+            <!-- Comment Section -->
+            <hr>
+            <div class="form-group mt-4">
+              <label for="comment" class="control-label font-weight-bold">Additional Comments</label>
+              <textarea name="comment" id="comment" cols="30" rows="5" class="form-control" placeholder="Please provide any additional feedback or comments about the faculty member..."></textarea>
+            </div>
+            
+            <!-- Submit Button -->
+            <button class="btn btn-primary btn-block btn-lg mt-4">Submit Evaluation</button>
           </div>
         </div>
-      </div>
-    </div>
-    <?php else: ?>
-    <div class="container-fluid">
-      <div class="col-lg-12">
-        <div class="card">
-          <div class="card-body">
-            <center><h4><b>You are done evaluating the faculties for SY <?php echo $_SESSION['sy_school_year'].' '.$_SESSION['sy_semester'] ?> SEMESTER. Thank you</b></h4></center>
-            
+      </form>
+      <?php elseif($qry->num_rows() == 0 && $evaluated->num_rows() == 0): ?>
+        <!-- No Faculty Message -->
+        <div class="container-fluid">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body text-center py-5">
+                <h4><b>There is no assigned faculty assigned under your course/program for <?php echo $_SESSION['sy_school_year'].' '.$_SESSION['sy_semester'] ?> SEMESTER Evaluation yet. Thank you</b></h4>
+                <p class="mt-3">Please check back later or contact your administrator if you believe this is an error.</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <?php endif; ?>
+      <?php else: ?>
+        <!-- Evaluation Complete Message -->
+        <div class="container-fluid">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body text-center py-5">
+                <h4><b>You are done evaluating the faculties for SY <?php echo $_SESSION['sy_school_year'].' '.$_SESSION['sy_semester'] ?> SEMESTER. Thank you</b></h4>
+                <div class="mt-4">
+                  <i class="fa fa-check-circle fa-4x text-success mb-3"></i>
+                </div>
+                <p class="mt-3">Your feedback is valuable and helps improve the quality of education.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      <?php endif; ?>
     </div>
   </main>
+
+  <!-- Hidden Templates -->
   <div id="rating_clone" style="display:none">
-<div class="question-item mb-2">
-    <div class=" question-item-row">
-    <div class="col-md-12 question-text"><strong></strong></div>
+    <div class="question-item mb-2">
+      <div class="question-item-row">
+        <div class="col-md-12 question-text"><strong></strong></div>
         <div class="rating-field">
-        <input type="hidden" name="qid[]">
-        <input type="hidden" name="question[]">
-        <input type="hidden" name="type[]">
-        
-            <span class="opt-group">
-            </span>
+          <input type="hidden" name="qid[]">
+          <input type="hidden" name="question[]">
+          <input type="hidden" name="type[]">
+          <span class="opt-group d-flex flex-wrap"></span>
         </div>
+      </div>
     </div>
-</div>
-</div>
-<div id="textare_clone" style="display:none">
-<div class="question-item mb-2">
-                    <div class=" question-item-row">
-                        
+  </div>
+
+  <div id="textare_clone" style="display:none">
+    <div class="question-item mb-2">
+      <div class="question-item-row">
         <input type="hidden" name="qid[]">
         <input type="hidden" name="question[]">
         <input type="hidden" name="type[]">
-                    <div class="col-md-12 question-text"><strong></strong></div>
-                        <div class="textarea-field mt-3">
-                            <div class="md-form" style="padding:1em">
-                                <textarea id="question" class="md-textarea form-control bg-light" rows="4"  placeholder="Write your answer here."></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-</div>
-  <!--Main layout-->
-<!--Footer-->
-  <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn" style="padding-left:unset">
-
-
-
-    <!--Copyright-->
-    <div class="footer-copyright py-3">
-      © 2020 All Rights Reserved
+        <div class="col-md-12 question-text"><strong></strong></div>
+        <div class="textarea-field mt-3">
+          <div class="md-form">
+            <textarea class="md-textarea form-control" rows="4" placeholder="Write your answer here..."></textarea>
+          </div>
+        </div>
+      </div>
     </div>
-    <!--/.Copyright-->
+  </div>
+  <!--Main layout-->
 
+  <!--Footer-->
+  <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn" style="padding-left:unset">
+    <div class="footer-copyright py-3">
+      © <?php echo date("Y"); ?> All Rights Reserved
+    </div>
   </footer>
 
-  <!-- //Modals -->
-  <div id="load_modal">
-      <div class="card">
-        <div class="card-body">
-        <center><div class="spinner-border text-info" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>  <br>
-      <small><b>Please wait...</b></small>
-        
-      </center>
-        </div>
-      </div>
-  </div>
-  <div class="modal fade" id="frm_modal" role='dialog'>
-    <div class="modal-dialog modal-md" role="document">
+  <!-- Modals -->
+  <div id="load_modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-        <h5 class="modal-title"></h5>
-      </div>
-      <div class="modal-body">
-        <form action=""></form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id='submit' onclick="">Save</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-      </div>
+        <div class="modal-body text-center p-5">
+          <div class="spinner-border text-info loading-pulse" role="status" style="width: 3rem; height: 3rem;">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <h5 class="mt-3">Please wait...</h5>
+          <p>We're processing your request</p>
+        </div>
       </div>
     </div>
   </div>
-  <!-- <pre>
-      <?php var_dump($_SESSION) ?>
-  </pre> -->
+
+  <div class="modal fade" id="frm_modal" role='dialog'>
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action=""></form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id='submit' onclick="">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
+
 <script>
 $('input').trigger('focus').trigger('blur')
 $(document).ready(function(){

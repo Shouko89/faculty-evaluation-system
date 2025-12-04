@@ -35,7 +35,7 @@ class Subject_Model extends CI_Model {
     function remove(){
         extract($_POST);
         if(!empty($id)){
-            $qry = $this->db->update('subjects',array('status'=>0),array('id'=>$id));
+            $qry = $this->db->delete('subjects',array('id'=>$id));
             if($qry)
             return 1;
         }

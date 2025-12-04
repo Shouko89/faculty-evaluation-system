@@ -46,7 +46,7 @@ class Criteria_Model extends CI_Model {
     function remove(){
         extract($_POST);
         if(!empty($id)){
-            $qry = $this->db->update('criteria',array('status'=>0),array('id'=>$id));
+            $qry = $this->db->delete('criteria',array('id'=>$id));
             if($qry)
             return 1;
         }

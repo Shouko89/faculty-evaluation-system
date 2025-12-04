@@ -37,7 +37,7 @@ class Course_Model extends CI_Model {
     function remove(){
         extract($_POST);
         if(!empty($id)){
-            $qry = $this->db->update('courses',array('status'=>0),array('id'=>$id));
+            $qry = $this->db->delete('courses',array('id'=>$id));
             if($qry)
             return 1;
         }
